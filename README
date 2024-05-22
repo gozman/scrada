@@ -1,0 +1,21 @@
+  ____                     _       
+ / ___|  ___ _ __ __ _  __| | __ _ 
+ \___ \ / __| '__/ _` |/ _` |/ _` |
+  ___) | (__| | | (_| | (_| | (_| |
+ |____/ \___|_|  \__,_|\__,_|\__,_|
+                                   
+
+Process a sitemap.xml for consumption by Ada's AI Agent
+
+To use:
+
+git clone <this repo>
+npm install
+export API_KEY=<your Ada KB API key>
+export SUBDOMAIN=<your Ada subdomain>
+node index.js
+
+Provide a URL to the sitemap.xml file you want to process.
+Follow the rest of the instructions
+
+Enjoy!

@@ -1,0 +1,24 @@
+{
+  "name": "scrada",
+  "version": "1.0.0",
+  "description": "Download a sitemap.xml file, scrape all the content from the site, upload it to Ada",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mike Gozzo <mgozzo@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@mozilla/readability": "^0.5.0",
+    "axios": "^1.7.2",
+    "cli-progress": "^3.12.0",
+    "dotenv": "^16.4.5",
+    "figlet": "^1.7.0",
+    "inquirer": "^9.2.22",
+    "jsdom": "^24.0.0",
+    "selenium-webdriver": "^4.21.0",
+    "turndown": "^7.2.0",
+    "uuid": "^9.0.1",
+    "xml2js": "^0.6.2"
+  }
+}
