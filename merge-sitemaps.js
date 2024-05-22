@@ -1,6 +1,7 @@
 const axios = require('axios');
 const xml2js = require('xml2js');
 const fs = require('fs');
+const cliProgress = require('cli-progress');
 
 const parser = new xml2js.Parser();
 const builder = new xml2js.Builder();
@@ -41,6 +42,7 @@ async function parseSitemap(xml) {
 async function extractUrls(sitemapUrl) {
   const visited = new Set();
   const allUrls = [];
+  const progressBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
 
   async function traverseSitemap(url) {
     if (visited.has(url)) return;
@@ -52,12 +54,16 @@ async function extractUrls(sitemapUrl) {
     const { urls, sitemaps } = await parseSitemap(xml);
 
     allUrls.push(...urls);
+    progressBar.increment(urls.length);
     for (const subSitemapUrl of sitemaps) {
       await traverseSitemap(subSitemapUrl);
     }
   }
 
+  progressBar.start(0, 0);
   await traverseSitemap(sitemapUrl);
+  progressBar.stop();
+  console.log(`Total URLs discovered: ${allUrls.length}`);
   return allUrls;
 }
 
