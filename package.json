@@ -4,7 +4,9 @@
   "description": "Electron app to process a sitemap and upload content to Ada",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"    
   },
   "build": {
     "appId": "ca.gozzo.scrada",
