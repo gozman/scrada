@@ -1,10 +1,10 @@
 {
-  "name": "scrada",
+  "name": "scrada-electron",
   "version": "1.0.0",
-  "description": "Download a sitemap.xml file, scrape all the content from the site, upload it to Ada",
-  "main": "index.js",
+  "description": "Electron app to process a sitemap and upload content to Ada",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
   "author": "Mike Gozzo <mgozzo@gmail.com>",
   "license": "ISC",
@@ -13,12 +13,17 @@
     "axios": "^1.7.2",
     "cli-progress": "^3.12.0",
     "dotenv": "^16.4.5",
+    "electron": "^33.0.2",
     "figlet": "^1.7.0",
     "inquirer": "^9.2.22",
     "jsdom": "^24.0.0",
+    "node-fetch": "^2.6.7",
     "selenium-webdriver": "^4.21.0",
     "turndown": "^7.2.0",
     "uuid": "^9.0.1",
     "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "electron": "^33.0.2"
   }
 }
