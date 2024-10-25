@@ -5,17 +5,16 @@
  |____/ \___|_|  \__,_|\__,_|\__,_|
                                    
 
-Process a sitemap.xml for consumption by Ada's AI Agent
+Process a sitemap.xml for consumption by Ada's AI Agent.
 
 To use:
 
-git clone <this repo>
-npm install
-export API_KEY=<your Ada KB API key>
-export SUBDOMAIN=<your Ada subdomain>
-node index.js
+1. Add your knowledge API key
+2. Add your Ada instance subdomain
+3. List knowledge sources and make sure the source you want to create doesn't already exist.
+4. Provide a link to a sitemap.xml you want to crawl
+5. Name the knowledge source you want to create
+6. Run the scraping job!
 
-Provide a URL to the sitemap.xml file you want to process.
-Follow the rest of the instructions
-
-Enjoy!
+Sit back, Scrada will open Chrome on your mac and iterate through the web pages it finds in the sitemap. This will get around most bot protections. 
+Once it has scraped all the web pages, they will be uploaded into the Knowledge Hub through the API.
