@@ -4,7 +4,21 @@
   "description": "Electron app to process a sitemap and upload content to Ada",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
+      ]
+    }
   },
   "author": "Mike Gozzo <mgozzo@gmail.com>",
   "license": "ISC",
@@ -13,7 +27,6 @@
     "axios": "^1.7.2",
     "cli-progress": "^3.12.0",
     "dotenv": "^16.4.5",
-    "electron": "^33.0.2",
     "figlet": "^1.7.0",
     "inquirer": "^9.2.22",
     "jsdom": "^24.0.0",
@@ -24,6 +37,7 @@
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
-    "electron": "^33.0.2"
+    "electron": "^33.0.2",
+    "electron-builder": "^25.1.8"
   }
 }
