@@ -6,6 +6,15 @@
   "scripts": {
     "start": "electron ."
   },
+  "build": {
+    "appId": "ca.gozzo.scrada",
+    "win": {
+      "target": "zip"
+    },
+    "mac": {
+      "target": "dmg"
+    }
+  },
   "author": "Mike Gozzo <mgozzo@gmail.com>",
   "license": "ISC",
   "dependencies": {
