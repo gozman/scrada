@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scrada Electron App</title>
+  <!-- Bootstrap CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css"
+  />
+</head>
+<body>
+  <div class="container my-5">
+    <h1 class="text-center mb-5">Scrada</h1>
+
+    <!-- Configuration Section -->
+    <form id="config-form">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="apiKey">Knowledge API Key:</label>
+          <input type="text" id="apiKey" class="form-control" required />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="subdomain">Ada Subdomain:</label>
+          <input type="text" id="subdomain" class="form-control" required />
+        </div>
+      </div>
+    </form>
+
+    <hr class="my-5" />
+
+    <div class="row">
+      <!-- Left Column: Scrape Job -->
+      <div class="col-md-6">
+        <h2 class="mb-4">Scrape Job</h2>
+        <form id="scrape-form">
+          <div class="form-group">
+            <label for="sitemapUrl">Sitemap URL to Scrape:</label>
+            <input type="text" id="sitemapUrl" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="knowledgeSourceName">Knowledge Source to Create:</label>
+            <input type="text" id="knowledgeSourceName" class="form-control" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Start Scraping</button>
+        </form>
+      </div>
+
+      <!-- Right Column: Manage Knowledge Sources -->
+      <div class="col-md-6">
+        <h2 class="mb-4">Manage Knowledge Sources</h2>
+        <button id="listSourcesBtn" class="btn btn-info mb-3">List Knowledge Sources</button>
+        <table class="table table-striped" id="knowledgeSourcesTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>ID</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Knowledge sources will be populated here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="progress" class="mt-4"></div>
+    <pre id="output"></pre>
+  </div>
+
+  <!-- jQuery and Bootstrap JS for interactivity -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"
+  ></script>
+  <script src="renderer.js"></script>
+</body>
+</html>
