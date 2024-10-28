@@ -33,7 +33,7 @@ app.on('activate', () => {
 
 // Existing IPC Handler to start scraping
 ipcMain.handle('start-scraping', async (event, data) => {
-  const { sitemapUrl, knowledgeSourceName, apiKey, subdomain } = data;
+  const { sitemapUrl, knowledgeSourceName, apiKey, subdomain, urlFilter } = data;
   const mainWindow = BrowserWindow.getFocusedWindow();
 
   try {
@@ -42,7 +42,8 @@ ipcMain.handle('start-scraping', async (event, data) => {
       knowledgeSourceName,
       apiKey,
       subdomain,
-      mainWindow
+      mainWindow,
+      urlFilter // Pass the URL filter to the function
     );
     return 'Scraping and upload completed successfully.';
   } catch (error) {

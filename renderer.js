@@ -11,6 +11,8 @@ form.addEventListener('submit', async (e) => {
   const knowledgeSourceName = document.getElementById('knowledgeSourceName').value;
   const apiKey = document.getElementById('apiKey').value;
   const subdomain = document.getElementById('subdomain').value;
+  // Read the URL Filter value
+  const urlFilter = document.getElementById('urlFilter').value;
 
   if (!apiKey || !subdomain) {
     alert('Please enter your Knowledge API Key and Ada Subdomain in the configuration.');
@@ -24,6 +26,7 @@ form.addEventListener('submit', async (e) => {
       knowledgeSourceName,
       apiKey,
       subdomain,
+      urlFilter, // Include the URL filter
     });
 
     // Provide feedback to the user

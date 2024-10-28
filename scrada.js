@@ -6,15 +6,6 @@ const { Readability } = require('@mozilla/readability');
 const TurndownService = require('turndown');
 const { Builder, By } = require('selenium-webdriver');
 
-// Removed config.json dependency
-// const config = require('./config.json');
-
-// Removed API_KEY and BASE_URL from here
-
-// Now headers and BASE_URL will be constructed within the functions
-
-// Existing functions refactored...
-
 async function createKnowledgeSource(src, headers, baseUrl) {
   console.log(`Creating source: ${src} at ${baseUrl}/knowledge/v1/sources`);
   const response = await axios.post(
@@ -27,7 +18,7 @@ async function createKnowledgeSource(src, headers, baseUrl) {
   return response.data.data.id;
 }
 
-async function fetchSitemapUrls(sitemapUrl) {
+async function fetchSitemapUrls(sitemapUrl, urlFilter) {
   const visited = new Set();
   const allUrls = [];
   const parser = new xml2js.Parser();
@@ -74,7 +65,16 @@ async function fetchSitemapUrls(sitemapUrl) {
 
     const { urls, sitemaps } = await parseSitemap(xml);
 
-    allUrls.push(...urls);
+    // Filter URLs based on the urlFilter
+    const filteredUrls = urls.filter((url) => {
+      if (!urlFilter || url.includes(urlFilter)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    allUrls.push(...filteredUrls);
 
     for (const subSitemapUrl of sitemaps) {
       await traverseSitemap(subSitemapUrl);
@@ -149,7 +149,14 @@ async function scrapeAndConvertToMarkdown(urls, mainWindow) {
 }
 
 // Updated createSourceAndUploadContent function
-async function createSourceAndUploadContent(sitemapUrl, sourceName, apiKey, subdomain, mainWindow) {
+async function createSourceAndUploadContent(
+  sitemapUrl,
+  sourceName,
+  apiKey,
+  subdomain,
+  mainWindow,
+  urlFilter // Accept the URL filter
+) {
   const baseUrl = `https://${subdomain}.ada.support/api`;
   const headers = {
     'Authorization': `Bearer ${apiKey}`,
@@ -163,7 +170,7 @@ async function createSourceAndUploadContent(sitemapUrl, sourceName, apiKey, subd
 
   // Fetch URLs from the sitemap
   mainWindow.webContents.send('progress-update', { message: 'Fetching URLs from sitemap...' });
-  const urls = await fetchSitemapUrls(sitemapUrl);
+  const urls = await fetchSitemapUrls(sitemapUrl, urlFilter); // Pass the URL filter
 
   // Scrape and convert the pages to markdown
   mainWindow.webContents.send('progress-update', { message: 'Scraping pages and converting to markdown...' });
