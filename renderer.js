@@ -58,10 +58,20 @@ document.getElementById('back-to-step-2').addEventListener('click', () => {
 });
 
 document.getElementById('to-step-4').addEventListener('click', async () => {
+  // Get the Next button
+  const nextButton = document.getElementById('to-step-4');
+
+  // Disable the Next button and change its label
+  nextButton.disabled = true;
+  nextButton.textContent = 'Traversing Sitemap';
+
   // Fetch the URLs from the sitemap and proceed to Step 4
   const sitemapUrl = document.getElementById('sitemapUrl').value;
   if (!sitemapUrl) {
     alert('Please enter the Sitemap URL.');
+    // Re-enable the Next button and reset its label
+    nextButton.disabled = false;
+    nextButton.textContent = 'Next';
     return;
   }
 
@@ -69,9 +79,15 @@ document.getElementById('to-step-4').addEventListener('click', async () => {
     const urls = await electronAPI.fetchSitemapUrls(sitemapUrl);
     urlsToScrape = urls; // Store the fetched URLs
     populateUrlList(urlsToScrape);
+    // Re-enable the Next button and reset its label
+    nextButton.disabled = false;
+    nextButton.textContent = 'Next';
     showStep(4);
   } catch (error) {
     alert('Failed to fetch URLs from the sitemap. Please check the URL and try again.');
+    // Re-enable the Next button and reset its label
+    nextButton.disabled = false;
+    nextButton.textContent = 'Next';
   }
 });
 
@@ -195,11 +211,19 @@ async function deleteKnowledgeSource(event) {
 
 // Variables to store URLs
 let urlsToScrape = [];
+let totalUrls = 0;
+let selectedUrlsCount = 0;
+
+// Get reference to the count display element
+const selectedCountElement = document.getElementById('selectedCount');
 
 // Function to populate URL list in Step 4
 function populateUrlList(urls) {
   const urlList = document.getElementById('urlList');
   urlList.innerHTML = '';
+  totalUrls = urls.length;
+  selectedUrlsCount = urls.length; // Initially, all are checked
+  updateSelectedCount();
 
   urls.forEach((url) => {
     const li = document.createElement('li');
@@ -211,32 +235,56 @@ function populateUrlList(urls) {
 
     urlList.appendChild(li);
   });
+
+  // Add event listeners to checkboxes
+  const checkboxes = urlList.querySelectorAll('.url-checkbox');
+  checkboxes.forEach((cb) => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) {
+        selectedUrlsCount++;
+      } else {
+        selectedUrlsCount--;
+      }
+      updateSelectedCount();
+    });
+  });
+}
+
+// Function to update the selected count display
+function updateSelectedCount() {
+  selectedCountElement.textContent = `${selectedUrlsCount} of ${totalUrls} URLs selected for scraping`;
 }
 
 // Event listeners for Check All / Uncheck All buttons
 document.getElementById('checkAllBtn').addEventListener('click', () => {
   const checkboxes = document.querySelectorAll('.url-checkbox');
   checkboxes.forEach((cb) => {
-    if (cb.parentElement.style.display !== 'none') {
+    const listItem = cb.closest('.list-group-item');
+    if (listItem.style.display !== 'none' && !cb.checked) {
       cb.checked = true;
+      selectedUrlsCount++;
     }
   });
+  updateSelectedCount();
 });
 
 document.getElementById('uncheckAllBtn').addEventListener('click', () => {
   const checkboxes = document.querySelectorAll('.url-checkbox');
   checkboxes.forEach((cb) => {
-    if (cb.parentElement.style.display !== 'none') {
+    const listItem = cb.closest('.list-group-item');
+    if (listItem.style.display !== 'none' && cb.checked) {
       cb.checked = false;
+      selectedUrlsCount--;
     }
   });
+  updateSelectedCount();
 });
 
 // Event listener for page filter
 document.getElementById('pageFilter').addEventListener('input', () => {
   const filterText = document.getElementById('pageFilter').value.toLowerCase();
   const listItems = document.querySelectorAll('#urlList .list-group-item');
-
+  
   listItems.forEach((item) => {
     const url = item.textContent.toLowerCase();
     if (url.includes(filterText)) {
@@ -253,7 +301,7 @@ function getSelectedUrls() {
   const selectedUrls = [];
 
   checkboxes.forEach((cb) => {
-    if (cb.checked && cb.parentElement.style.display !== 'none') {
+    if (cb.checked) {
       selectedUrls.push(cb.getAttribute('data-url'));
     }
   });
