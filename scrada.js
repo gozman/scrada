@@ -155,25 +155,30 @@ async function createSourceAndUploadContent(
   apiKey,
   subdomain,
   mainWindow,
-  urlFilter // Accept the URL filter
+  urlFilter,
+  urls // Accept URLs array
 ) {
   const baseUrl = `https://${subdomain}.ada.support/api`;
   const headers = {
-    'Authorization': `Bearer ${apiKey}`,
+    Authorization: `Bearer ${apiKey}`,
     'Content-Type': 'application/json',
-    'accept': 'application/json',
+    accept: 'application/json',
   };
 
   // Create a knowledge source
   mainWindow.webContents.send('progress-update', { message: 'Creating knowledge source...' });
   const sourceId = await createKnowledgeSource(sourceName, headers, baseUrl);
 
-  // Fetch URLs from the sitemap
-  mainWindow.webContents.send('progress-update', { message: 'Fetching URLs from sitemap...' });
-  const urls = await fetchSitemapUrls(sitemapUrl, urlFilter); // Pass the URL filter
+  // If URLs are not provided, fetch from sitemap
+  if (!urls) {
+    mainWindow.webContents.send('progress-update', { message: 'Fetching URLs from sitemap...' });
+    urls = await fetchSitemapUrls(sitemapUrl, urlFilter);
+  }
 
   // Scrape and convert the pages to markdown
-  mainWindow.webContents.send('progress-update', { message: 'Scraping pages and converting to markdown...' });
+  mainWindow.webContents.send('progress-update', {
+    message: 'Scraping pages and converting to markdown...',
+  });
   const scrapedData = await scrapeAndConvertToMarkdown(urls, mainWindow);
 
   // Upload articles to Ada with progress updates
@@ -215,6 +220,9 @@ async function createSourceAndUploadContent(
   mainWindow.webContents.send('progress-update', { message: 'Upload completed.' });
 }
 
+
 module.exports = {
   createSourceAndUploadContent,
+  fetchSitemapUrls,
+  scrapeAndConvertToMarkdown
 };

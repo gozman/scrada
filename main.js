@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { createSourceAndUploadContent } = require('./scrada.js');
+const { createSourceAndUploadContent, fetchSitemapUrls } = require('./scrada.js');
 const fetch = require('node-fetch'); // Import node-fetch for HTTP requests
 
 // Function to create the main application window
@@ -33,22 +33,34 @@ app.on('activate', () => {
 
 // Existing IPC Handler to start scraping
 ipcMain.handle('start-scraping', async (event, data) => {
-  const { sitemapUrl, knowledgeSourceName, apiKey, subdomain, urlFilter } = data;
+  const { knowledgeSourceName, apiKey, subdomain, urls } = data;
   const mainWindow = BrowserWindow.getFocusedWindow();
 
   try {
     await createSourceAndUploadContent(
-      sitemapUrl,
+      null, // No sitemap URL since we're providing URLs directly
       knowledgeSourceName,
       apiKey,
       subdomain,
       mainWindow,
-      urlFilter // Pass the URL filter to the function
+      null, // No URL filter
+      urls // Pass the selected URLs
     );
     return 'Scraping and upload completed successfully.';
   } catch (error) {
     console.error('Error:', error);
     throw new Error('An error occurred during the scraping process.');
+  }
+});
+
+// IPC Handler to fetch sitemap URLs
+ipcMain.handle('fetch-sitemap-urls', async (event, sitemapUrl) => {
+  try {
+    const urls = await fetchSitemapUrls(sitemapUrl);
+    return urls;
+  } catch (error) {
+    console.error('Error fetching sitemap URLs:', error);
+    throw new Error('Failed to fetch sitemap URLs.');
   }
 });
 
